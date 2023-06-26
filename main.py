@@ -1,10 +1,11 @@
 # Необходимые импорты
 import telebot
-import text
 import random
+import text
+import get_token
 
 # Токен для подключения бота
-bot_token = "token"
+bot_token = get_token.TOKEN
 
 # Переменная для хранения глобальной последовательности
 sequence: str = ""
@@ -98,6 +99,9 @@ def user_play(message):
     # Объявляем глобальный счётчик попыток
     global counter_user
 
+    # Объявляем глобальную последовательность, которую нужно отгадать пользователю
+    global sequence
+
     # Если пользователь вводит "/stop", то выводим заключительное сообщение и не продолжаем игровой цикл
     if message.text == "/stop":
         bot.send_message(message.chat.id, text.userPlay_stop_text)
@@ -112,7 +116,7 @@ def user_play(message):
         counter_user += 1
 
         # Подчитываем количество быков и коров
-        bulls, cows = count_bulls_and_cows(message.text)
+        bulls, cows = count_bulls_and_cows(message.text, sequence)
 
         # Если пользователь угадал последовательность, то выводим поздравления,
         # обнуляем счётчик и не продолжаем игровой цикл
@@ -349,9 +353,7 @@ def thin_out_sequence_set(proven_seq: str, bull_count: int, cow_count):
         if (bull_count_in_seq != bull_count) or (cow_count_in_seq != cow_count):
             sequence_set.remove(seq)
 
-
 # Запускаем бота в режиме постоянного прослушивания пользовательского ввода
-bot.polling(none_stop=True)
-
-
-
+if __name__ == "__main__":
+    print("Telegram-бот запущен...")
+    bot.infinity_polling()
