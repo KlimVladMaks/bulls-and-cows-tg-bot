@@ -122,10 +122,10 @@ class BotChatSession:
                 # обнуляем счётчик и не возвращаемся в main-цикл
                 if bulls == 4:
                     self.current_cycle = "main"
-                    self.counter_user = 0
                     bot_outputs = [text.user_play_win_text.format(sequence=self.sequence, 
                                                                  counter_user=self.counter_user)]
                     bot_outputs.append(text.user_play_stop_text)
+                    self.counter_user = 0
                     return bot_outputs
                 
                 # Иначе выводим количество быков и коров

@@ -1,24 +1,40 @@
 # Импорты библиотек
 import telebot
-import random
+import datetime
 
 # Импорты файлов
-import get_token
-import text
 from bot_chat_session import BotChatSession
+
+# Переменная для хранения бота
+bot: telebot.TeleBot
+
+# При запуске программы
+if __name__ == "__main__":
+
+    # Цикл проверки корректности токена
+    while True:
+
+        # Запрашиваем токен и создаём бота
+        bot_token = input("Введите токен для Telegram-бота:\n")
+        bot = telebot.TeleBot(token=bot_token)
+
+        # Проверяем корректность токена
+        # (Если токен корректен - выходим из цикла, иначе - повторяем цикл)
+        try:
+            bot_info = bot.get_me()
+        except:
+            print("Не удаётся подключиться к Telegram-боту. Проверьте правильность токена и введите его повторно.")
+            continue
+        else:
+            print("Подключение к Telegram-боту успешно установлено.")
+            break
 
 # Словарь для хранения сессий пользователей
 chat_dict: dict[int, BotChatSession] = {}
 
-# Токен для подключения бота
-bot_token = get_token.TOKEN
-
-# Создаём бота
-bot = telebot.TeleBot(bot_token)
-
 
 @bot.message_handler(content_types=["text"])
-def processing(message: telebot.types.Message):
+def message_handler(message: telebot.types.Message):
     """
     Функция для обработки пользовательского ввода.
 
@@ -37,7 +53,25 @@ def processing(message: telebot.types.Message):
         bot.send_message(message.chat.id, bot_output)
 
 
-# Запускаем бота в режиме постоянного прослушивания пользовательского ввода
+# При запуске программы
 if __name__ == "__main__":
+
+    # Выводим сообщение о запуске бота
     print("Telegram-бот запущен...")
-    bot.infinity_polling()
+
+    # Запускаем бесконечный цикл работы бота
+    while True:
+
+        # Запускаем бота в режиме постоянного мониторинга
+        try:
+            bot.polling(non_stop=True)
+        
+        # При возникновении исключения, выводим сообщение об ошибке и повторяем цикл
+        except Exception:
+            print(f"{datetime.datetime.now()}: Соединение с Telegram-ботом нестабильно. Возможны задержки при ответе " \
+                  f"на сообщения пользователей или их потеря.")
+            continue
+
+        # Иначе просто повторяем цикл
+        else:
+            continue

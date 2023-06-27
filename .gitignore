@@ -3,3 +3,4 @@ get_token.py
 __pycache__/get_token.cpython-311.pyc
 __pycache__/text.cpython-311.pyc
 __pycache__/bot_chat_session.cpython-311.pyc
+__pycache__/exception_handler.cpython-311.pyc
